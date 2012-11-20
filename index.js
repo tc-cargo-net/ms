@@ -1,4 +1,3 @@
-
 /**
  * Helpers.
  */
@@ -7,6 +6,7 @@ var s = 1000;
 var m = s * 60;
 var h = m * 60;
 var d = h * 24;
+var y = d * 365.25;
 
 /**
  * Parse or format the given `val`.
@@ -38,31 +38,31 @@ module.exports = function(val, options){
  */
 
 function parse(str) {
-  var m = /^((?:\d+)?\.?\d+) *(ms|seconds?|s|minutes?|m|hours?|h|days?|d|years?|y)?$/i.exec(str);
-  if (!m) return;
-  var n = parseFloat(m[1]);
-  var type = (m[2] || 'ms').toLowerCase();
+  var match = /^((?:\d+)?\.?\d+) *(ms|seconds?|s|minutes?|m|hours?|h|days?|d|years?|y)?$/i.exec(str);
+  if (!match) return;
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
   switch (type) {
     case 'years':
     case 'year':
     case 'y':
-      return n * 31557600000;
+      return n * y;
     case 'days':
     case 'day':
     case 'd':
-      return n * 86400000;
+      return n * d;
     case 'hours':
     case 'hour':
     case 'h':
-      return n * 3600000;
+      return n * h;
     case 'minutes':
     case 'minute':
     case 'm':
-      return n * 60000;
+      return n * m;
     case 'seconds':
     case 'second':
     case 's':
-      return n * 1000;
+      return n * s;
     case 'ms':
       return n;
   }
@@ -93,6 +93,7 @@ function short(ms) {
  */
 
 function long(ms) {
+<<<<<<< HEAD
   return plural(ms, d, 'day')
     || plural(ms, h, 'hour')
     || plural(ms, m, 'minute')
@@ -110,3 +111,15 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
+=======
+  if (ms == d) return Math.round(ms / d) + ' day';
+  if (ms > d) return Math.round(ms / d) + ' days';
+  if (ms == h) return Math.round(ms / h) + ' hour';
+  if (ms > h) return Math.round(ms / h) + ' hours';
+  if (ms == m) return Math.round(ms / m) + ' minute';
+  if (ms > m) return Math.round(ms / m) + ' minutes';
+  if (ms == s) return Math.round(ms / s) + ' second';
+  if (ms > s) return Math.round(ms / s) + ' seconds';
+  return ms + ' ms';
+}
+>>>>>>> 9992f8a... Fixes #22 where minutes does not work due to an unfortunately named variable.
